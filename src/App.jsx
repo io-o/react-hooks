@@ -2,6 +2,7 @@ import React from 'react'
 
 // learn·组件
 import LearnUseReducer from './Learn/learnUseReducer'
+import LearnHooks from './Learn/learnHooks'
 
 
 function App() {
@@ -9,7 +10,9 @@ function App() {
 
   return (
     <div>
-      <LearnUseReducer></LearnUseReducer>
+      
+      {/* <LearnUseReducer></LearnUseReducer> */}
+      <LearnHooks></LearnHooks>
     </div>
   )
 }
