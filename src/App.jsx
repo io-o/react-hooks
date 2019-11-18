@@ -3,6 +3,7 @@ import React from 'react'
 // learn·组件
 import LearnUseReducer from './Learn/learnUseReducer'
 import LearnHooks from './Learn/learnHooks'
+import TodoList from './Learn/TodoList'
 
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
     <div>
       
       {/* <LearnUseReducer></LearnUseReducer> */}
-      <LearnHooks></LearnHooks>
+      {/* <LearnHooks></LearnHooks> */}
+      <TodoList></TodoList>
     </div>
   )
 }
