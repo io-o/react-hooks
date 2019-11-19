@@ -1,5 +1,34 @@
-import React, {useCallback, useState, useEffect, useRef, memo} from 'react'
+import React, {
+  useCallback, 
+  useState, 
+  useEffect, 
+  useRef, 
+  memo
+  } from 'react'
+import { 
+    createAdd, 
+    createRemove, 
+    createSet, 
+    createToggle 
+  } from './action'
 import './index.css'
+
+
+  function bindAction(actionCreators, dispatch) {
+    const ret = {}
+    for (let key in actionCreators) {
+      ret[key] = function (...args) {
+
+        const actionCreator = actionCreators[key]
+        const action = actionCreator(...args)
+        dispatch(action)
+      }
+    }
+
+
+
+    return ret
+  }
 
 
 
@@ -11,16 +40,16 @@ const TodoItem = memo(
         text,
         complete
       }, 
-      removeaTodo, 
-      toggleTodo 
+      dispatch 
     } = props
     
+    
     const onChange = () => {
-      toggleTodo(id)
+      dispatch(createToggle(id))
     }
   
     const onRemove = () => {
-      removeaTodo(id)
+      dispatch(createRemove(id))
     }
   
   
@@ -42,7 +71,7 @@ const TodoItem = memo(
 
 const Todo = memo(
   function (props) {
-    const { todos,removeaTodo,toggleTodo} = props
+    const { dispatch,todos } = props
   
     return ( 
       <ul className="todo">
@@ -52,8 +81,8 @@ const Todo = memo(
               <TodoItem 
                 key={item.id}
                 todo={item}
-                removeaTodo={removeaTodo}
-                toggleTodo={toggleTodo}
+                dispatch={dispatch}
+                dispatch={dispatch}
               />
             )
           })
@@ -106,23 +135,32 @@ function TodoList() {
   const [todos, setTodos] = useState([])
 
   // 需要向子组件传递 使用 usecallback
-  const addTodo = useCallback((todo) => {
-    setTodos(todos => [...todos, todo])
-  }, [])
 
-  const removeaTodo = useCallback((id) => {
-    setTodos(todos => todos.filter(todo => {
-      return todo.id !== id
-    }))
-  }, [])
+  const dispatch = useCallback(
+    (action) => {
+      const { type, payload } = action
+      switch(type) {
+        case 'add':
+          setTodos(todos => [...todos, payload])
+          break;
+        case 'toggle':
+          setTodos(todos => todos.map(todo => {
+            return todo.id === payload
+              ? {...todo, complete: !todo.complete }
+              : todo
+            }))
+          break;
+        case 'remove':
+          setTodos(todos => todos.filter(todo => {
+            return todo.id !== payload
+          }))
+          break;
+        case 'remove':
+          break;
+        default:
+      }
+    }, [])
 
-  const toggleTodo = useCallback((id) => {
-    setTodos(todos => todos.map(todo => {
-      return todo.id === id
-        ? {...todo, complete: !todo.complete }
-        : todo
-     }))
-  }, [])
 
   // 要注意 useEffect 的顺序  
   useEffect(() => {
@@ -136,16 +174,19 @@ function TodoList() {
 
 
 
-
   return (
     <div className="todo-list">
       <Control 
-        addTodo={addTodo}
+        {
+          ...bindAction({
+            addTodo: createAdd
+          }, dispatch)
+        }
       />
 
       <Todo 
-        removeaTodo={removeaTodo}
-        toggleTodo={toggleTodo}
+        dispatch={dispatch}
+        dispatch={dispatch}
         todos={todos}
       />
     </div>
