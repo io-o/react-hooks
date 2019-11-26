@@ -1,10 +1,8 @@
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
-function App(props) {
-  
-}
+function App(props) {}
 
 export default connect(
   function mapStateToProps(state) {},
   function mapDispatchToProps(dispatch) {}
-)(App)
+)(App);
