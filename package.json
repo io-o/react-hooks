@@ -75,6 +75,7 @@
       "react-app"
     ],
     "rules": {
+      "no-console": "off",
       "react/jsx-indent": [
         "error",
         2
