@@ -7,7 +7,7 @@ import Journey from './Journey.jsx';
 
 import CitySelector from '../common/CitySelector';
 
-import { exchangeFromTo, showCitySelector } from './actions';
+import { exchangeFromTo, showCitySelector, hideCitySelector } from './actions';
 
 function App(props) {
   const {
@@ -33,6 +33,15 @@ function App(props) {
     );
   }, []);
 
+  const CitySelectorCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onBack: hideCitySelector,
+      },
+      dispatch
+    );
+  }, []);
+
   return (
     <div>
       <Header title="火车票" onBack={onBack} />
@@ -41,6 +50,7 @@ function App(props) {
         show={isCitySelectorVisible}
         cityData={cityData}
         isLoading={isLoadingCityData}
+        {...CitySelectorCbs}
       />
     </div>
   );
