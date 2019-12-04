@@ -64,8 +64,6 @@ export function showCitySelector(currentSelectingLeftCity) {
 }
 
 export function hideCitySelector() {
-  console.log(222);
-
   return {
     type: ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
     payload: false,

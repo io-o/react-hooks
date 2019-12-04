@@ -7,7 +7,12 @@ import Journey from './Journey.jsx';
 
 import CitySelector from '../common/CitySelector';
 
-import { exchangeFromTo, showCitySelector, hideCitySelector } from './actions';
+import {
+  exchangeFromTo,
+  showCitySelector,
+  hideCitySelector,
+  fetchCityData,
+} from './actions';
 
 function App(props) {
   const {
@@ -37,6 +42,7 @@ function App(props) {
     return bindActionCreators(
       {
         onBack: hideCitySelector,
+        fetchCityData,
       },
       dispatch
     );
