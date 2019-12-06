@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, memo } from 'react';
 // 函数增加class
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import './CitySelector.css';
 
-function CityItem(props) {
+// 函数组件 使用memo优化性能
+const CityItem = memo(function CityItem(props) {
   const { name, onSelect } = props;
 
   return (
@@ -12,9 +13,14 @@ function CityItem(props) {
       {name}
     </li>
   );
-}
+});
 
-function CitySection(props) {
+CityItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+const CitySection = memo(function CitySection(props) {
   const { title, cities = [], onSelect } = props;
 
   return (
@@ -29,9 +35,15 @@ function CitySection(props) {
       })}
     </ul>
   );
-}
+});
 
-function CityList(props) {
+CitySection.propTypes = {
+  title: PropTypes.string.isRequired,
+  cities: PropTypes.array,
+  onSelect: PropTypes.func.isRequired,
+};
+
+const CityList = memo(function CityList(props) {
   const { sections, onSelect } = props;
 
   return (
@@ -50,7 +62,11 @@ function CityList(props) {
       </div>
     </div>
   );
-}
+});
+CityList.propTypes = {
+  sections: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
 
 export default function CitySelector(props) {
   const { show, cityData, isLoading, onBack, fetchCityData, onSelect } = props;
@@ -117,4 +133,5 @@ CitySelector.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   onBack: PropTypes.func.isRequired,
   fetchCityData: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
