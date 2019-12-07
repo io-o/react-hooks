@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, memo } from 'react';
+import React, { useState, useMemo, useEffect, memo, useCallback } from 'react';
 // 函数增加class
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -25,7 +25,7 @@ const CitySection = memo(function CitySection(props) {
 
   return (
     <ul className="city-ul">
-      <li className="city-li" key={title}>
+      <li className="city-li" key={title} data-cate={title}>
         {title}
       </li>
       {cities.map(city => {
@@ -43,8 +43,28 @@ CitySection.propTypes = {
   onSelect: PropTypes.func.isRequired,
 };
 
+const AlphaIndex = memo(function AlphaIndex(props) {
+  const { alpha, onClick } = props;
+
+  return (
+    <i className="city-index-item" onClick={_ => onClick(alpha)}>
+      {alpha}
+    </i>
+  );
+});
+
+AlphaIndex.propTypes = {
+  alpha: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+// 生成 26字母组成的数组
+const alphabet = Array.from(new Array(26), (ele, index) => {
+  return String.fromCharCode(65 + index);
+});
+
 const CityList = memo(function CityList(props) {
-  const { sections, onSelect } = props;
+  const { sections, onSelect, toAlpha } = props;
 
   return (
     <div className="city-list">
@@ -60,12 +80,24 @@ const CityList = memo(function CityList(props) {
           );
         })}
       </div>
+      <div className="city-index">
+        {alphabet.map(alpha => {
+          return (
+            <AlphaIndex
+              onClick={toAlpha}
+              key={alpha}
+              alpha={alpha}
+            ></AlphaIndex>
+          );
+        })}
+      </div>
     </div>
   );
 });
 CityList.propTypes = {
   sections: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
+  toAlpha: PropTypes.func.isRequired,
 };
 
 export default function CitySelector(props) {
@@ -87,9 +119,20 @@ export default function CitySelector(props) {
       return <div>Loading</div>;
     }
     if (cityData) {
-      return <CityList sections={cityData.cityList} onSelect={onSelect} />;
+      return (
+        <CityList
+          sections={cityData.cityList}
+          onSelect={onSelect}
+          toAlpha={toAlpha}
+        />
+      );
     }
   };
+
+  // 定位快捷字母 使用dom自定义属性 跳到指定位置
+  const toAlpha = useCallback(alpha => {
+    document.querySelector(`[data-cate='${alpha}']`).scrollIntoView();
+  }, []);
 
   return (
     <div className={classnames('city-selector', { hidden: !show })}>
