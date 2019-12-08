@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import Header from '../common/Header.jsx';
 import Journey from './Journey.jsx';
+import DepartDate from './DepartDate.jsx';
 
 import CitySelector from '../common/CitySelector';
 
@@ -23,6 +24,7 @@ function App(props) {
     cityData,
     isCitySelectorVisible,
     isLoadingCityData,
+    departDate,
   } = props;
 
   const onBack = useCallback(() => {
@@ -54,6 +56,7 @@ function App(props) {
     <div>
       <Header title="火车票" onBack={onBack} />
       <Journey from={from} to={to} {...cbs} />
+      <DepartDate time={departDate} />
       <CitySelector
         show={isCitySelectorVisible}
         cityData={cityData}
