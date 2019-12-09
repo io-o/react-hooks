@@ -14,6 +14,7 @@ import {
   hideCitySelector,
   fetchCityData,
   setSelectedCity,
+  showDateSelector,
 } from './actions';
 
 function App(props) {
@@ -52,11 +53,20 @@ function App(props) {
     );
   }, []);
 
+  const departDateCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onClick: showDateSelector,
+      },
+      dispatch
+    );
+  }, []);
+
   return (
     <div>
       <Header title="火车票" onBack={onBack} />
       <Journey from={from} to={to} {...cbs} />
-      <DepartDate time={departDate} />
+      <DepartDate time={departDate} {...departDateCbs} />
       <CitySelector
         show={isCitySelectorVisible}
         cityData={cityData}
