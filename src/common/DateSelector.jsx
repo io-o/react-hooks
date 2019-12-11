@@ -5,7 +5,7 @@ import Header from './Header';
 import './DateSelector.css';
 
 function Month(props) {
-  const { startingTimeInMonth } = props;
+  const { startingTimeInMonth, onSelect } = props;
 
   const startDay = new Date(startingTimeInMonth);
   const currentDay = new Date(startingTimeInMonth);
@@ -33,8 +33,36 @@ function Month(props) {
     weeks.push(week);
   }
 
-  return <div></div>;
+  return (
+    <table className="date-table">
+      <thead>
+        <tr>
+          <td colSpan="7">
+            <h5>
+              {startDay.getFullYear()}年 {startDay.getMonth() + 1}月
+            </h5>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="date-table-weeks">
+          <th>周一</th>
+          <th>周二</th>
+          <th>周三</th>
+          <th>周四</th>
+          <th>周五</th>
+          <th className="weekend">周六</th>
+          <th className="weekend">周日</th>
+        </tr>
+      </tbody>
+    </table>
+  );
 }
+
+Month.propTypes = {
+  startingTimeInMonth: PropTypes.number.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
 
 export default function DateSelecotr(props) {
   const { show, onSelect, onBack } = props;
@@ -60,7 +88,13 @@ export default function DateSelecotr(props) {
       <Header title="日期选择" onBack={onBack}></Header>
       <div className="date-selector-tables">
         {monthSequence.map(month => {
-          return <Month key={month} startingTimeInMonth={month} />;
+          return (
+            <Month
+              onSelect={onSelect}
+              key={month}
+              startingTimeInMonth={month}
+            />
+          );
         })}
       </div>
     </div>
