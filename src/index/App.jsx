@@ -6,6 +6,7 @@ import Header from '../common/Header.jsx';
 import Journey from './Journey.jsx';
 import DepartDate from './DepartDate.jsx';
 import HighSpeed from './HighSpeed.jsx';
+import Submit from './Submit.jsx';
 
 import CitySelector from '../common/CitySelector';
 import DateSeletor from '../common/DateSelector';
@@ -102,21 +103,26 @@ function App(props) {
 
   return (
     <div>
-      <Header title="火车票" onBack={onBack} />
-      <Journey from={from} to={to} {...cbs} />
-      <DepartDate time={departDate} {...departDateCbs} />
-      <CitySelector
-        show={isCitySelectorVisible}
-        cityData={cityData}
-        isLoading={isLoadingCityData}
-        {...CitySelectorCbs}
-      />
-      <DateSeletor
-        show={isDateSelectorVisible}
-        {...dateSelectorCbs}
-        onSelect={onSelectDate}
-      />
-      <HighSpeed {...highSpeedCbs} highSpeed={highSpeed} />
+      <div className="header-wrapper">
+        <Header title="火车票" onBack={onBack} />
+      </div>
+      <form action="./query.html" className="form">
+        <Journey from={from} to={to} {...cbs} />
+        <DepartDate time={departDate} {...departDateCbs} />
+        <CitySelector
+          show={isCitySelectorVisible}
+          cityData={cityData}
+          isLoading={isLoadingCityData}
+          {...CitySelectorCbs}
+        />
+        <DateSeletor
+          show={isDateSelectorVisible}
+          {...dateSelectorCbs}
+          onSelect={onSelectDate}
+        />
+        <HighSpeed {...highSpeedCbs} highSpeed={highSpeed} />
+        <Submit />
+      </form>
     </div>
   );
 }
