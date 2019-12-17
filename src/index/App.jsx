@@ -5,9 +5,12 @@ import { bindActionCreators } from 'redux';
 import Header from '../common/Header.jsx';
 import Journey from './Journey.jsx';
 import DepartDate from './DepartDate.jsx';
+import HighSpeed from './HighSpeed.jsx';
 
 import CitySelector from '../common/CitySelector';
 import DateSeletor from '../common/DateSelector';
+
+import { h0 } from '../common/fp';
 
 import {
   exchangeFromTo,
@@ -17,6 +20,8 @@ import {
   setSelectedCity,
   showDateSelector,
   hideDateSelector,
+  setDepartDate,
+  toggleHighSpeed,
 } from './actions';
 
 function App(props) {
@@ -29,6 +34,7 @@ function App(props) {
     isLoadingCityData,
     departDate,
     isDateSelectorVisible,
+    highSpeed,
   } = props;
 
   const onBack = useCallback(() => {
@@ -74,6 +80,26 @@ function App(props) {
     );
   }, []);
 
+  const highSpeedCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        toggle: toggleHighSpeed,
+      },
+      dispatch
+    );
+  }, []);
+
+  const onSelectDate = useCallback(day => {
+    if (!day) {
+      return;
+    }
+    if (day < h0()) {
+      return;
+    }
+    dispatch(setDepartDate(day));
+    dispatch(hideDateSelector());
+  }, []);
+
   return (
     <div>
       <Header title="火车票" onBack={onBack} />
@@ -88,7 +114,9 @@ function App(props) {
       <DateSeletor
         show={isDateSelectorVisible}
         {...dateSelectorCbs}
-      ></DateSeletor>
+        onSelect={onSelectDate}
+      />
+      <HighSpeed {...highSpeedCbs} highSpeed={highSpeed} />
     </div>
   );
 }

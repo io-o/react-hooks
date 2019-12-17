@@ -2,7 +2,56 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Header from './Header';
+import { h0 } from '../common/fp';
 import './DateSelector.css';
+
+function Day(props) {
+  const { day, onSelect } = props;
+
+  if (!day) {
+    return <td className="null"></td>;
+  }
+
+  const classes = [];
+  const now = h0();
+  if (day < now) {
+    classes.push('disabled');
+  }
+  // 处理周末
+  if ([6, 0].includes(new Date(day).getDay())) {
+    classes.push('weekend');
+  }
+  // 判断是否今天
+  const dateString = now === day ? '今天' : new Date(day).getDate();
+
+  return (
+    <td onClick={_ => onSelect(day)} className={classNames(classes)}>
+      {dateString}
+    </td>
+  );
+}
+
+Day.propTypes = {
+  day: PropTypes.number,
+  onSelect: PropTypes.func.isRequired,
+};
+
+function Week(props) {
+  const { days, onSelect } = props;
+
+  return (
+    <tr className="date-table-days">
+      {days.map((day, index) => {
+        return <Day key={index} day={day} onSelect={onSelect}></Day>;
+      })}
+    </tr>
+  );
+}
+
+Week.propTypes = {
+  days: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
 
 function Month(props) {
   const { startingTimeInMonth, onSelect } = props;
@@ -54,6 +103,9 @@ function Month(props) {
           <th className="weekend">周六</th>
           <th className="weekend">周日</th>
         </tr>
+        {weeks.map((week, index) => {
+          return <Week key={index} days={week} onSelect={onSelect} />;
+        })}
       </tbody>
     </table>
   );
