@@ -8,7 +8,7 @@ import { ORDER_DEPART } from './constant';
 export default createStore(
   combineReducers(reducers),
   {
-    form: null,
+    from: null,
     to: null,
     departDate: h0(Date.now()),
     highSpeed: false,
@@ -25,7 +25,7 @@ export default createStore(
     departTimeEnd: 24,
     arriveTimeStart: 0,
     arriveTimeEnd: 24,
-    isFilterVisible: false,
+    isFiltersVisible: false,
     searchParsed: false,
   },
   applyMiddleware(thunk)
