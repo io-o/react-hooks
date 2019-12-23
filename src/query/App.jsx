@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import URI from 'urijs';
 import dayjs from 'dayjs';
 import { h0 } from '../common/fp';
+import useNav from '../common/useNav';
 
 import Header from '../common/Header';
 import Nav from '../common/Nav';
@@ -61,6 +62,7 @@ function App(props) {
     arriveTimeStart,
     arriveTimeEnd,
   } = props;
+
   const onBack = useCallback(() => {
     window.history.back();
   }, []);
@@ -140,11 +142,27 @@ function App(props) {
     arriveTimeEnd,
   ]);
 
+  const { isPrevDisabled, isNextDisabled, prev, next } = useNav(
+    departDate,
+    dispatch,
+    prevDate,
+    nextDate
+  );
+  if (!searchParsed) {
+    return null;
+  }
+
   return (
     <div>
       <div className="header-wrapper">
         <Header title={`${from} ⇀ ${to}`} onBack={onBack}></Header>
-        <Nav date={departDate} />
+        <Nav
+          date={departDate}
+          isPrevDisabled={isPrevDisabled}
+          isNextDisabled={isNextDisabled}
+          prev={prev}
+          next={next}
+        />
         <List></List>
         <Bottom></Bottom>
       </div>
