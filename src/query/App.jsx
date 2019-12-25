@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import URI from 'urijs';
 import dayjs from 'dayjs';
 import { h0 } from '../common/fp';
@@ -148,6 +149,19 @@ function App(props) {
     prevDate,
     nextDate
   );
+
+  const bottomCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        toggleHighSpeed,
+        toggleOnlyTickets,
+        toggleIsFiltersVisible,
+        toggleOrderType,
+      },
+      dispatch
+    );
+  }, []);
+
   if (!searchParsed) {
     return null;
   }
@@ -164,7 +178,13 @@ function App(props) {
           next={next}
         />
         <List list={trainList}></List>
-        <Bottom></Bottom>
+        <Bottom
+          highSpeed={highSpeed}
+          orderType={orderType}
+          onlyTickets={onlyTickets}
+          isFiltersVisible={isFiltersVisible}
+          {...bottomCbs}
+        />
       </div>
     </div>
   );
